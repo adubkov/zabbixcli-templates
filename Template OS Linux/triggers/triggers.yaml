@@ -1,0 +1,62 @@
+triggers:
+
+  -
+    name:       "I/O is overloaded on {HOST.NAME}"
+    warn_level: "Warning"
+    expression: "{Template OS Linux:system.cpu.util[,iowait].avg(10m)}>40"
+
+  -
+    name:       "Processor load is high on {HOST.NAME}"
+    warn_level: "Info"
+    expression: "{Template OS Linux:system.cpu.load[percpu,avg5].avg(10m)}>8"
+
+  -
+    name:       "Processor load is too high on {HOST.NAME}"
+    warn_level: "Warning"
+    expression: "{Template OS Linux:system.cpu.load[percpu,avg15].avg(60m)}>8"
+
+  -
+    name:       "{HOST.NAME} has just been restarted"
+    warn_level: "Info"
+    expression: "{Template OS Linux:system.uptime.change(0)}<0"
+
+  -
+    name:       "Less then 100Mb available memory on server {HOST.NAME}"
+    warn_level: "Info"
+    expression: "{Template OS Linux:vm.memory.size[available].max(#5)}<100M"
+
+  -
+    name:       "Less then 1Mb available memory on server {HOST.NAME}"
+    warn_level: "Warning"
+    expression: "{Template OS Linux:vm.memory.size[available].last(0)}<1M"
+
+  -
+    name:       "Swap usage >80% on {HOST.NAME}"
+    warn_level: "Warning"
+    expression: "{Template OS Linux:system.swap.size[,pused].last(0)}>80"
+
+  -
+    name:       "Configured max number of opened files is too low on {HOST.NAME}"
+    warn_level: "Info"
+    expression: "{Template OS Linux:kernel.maxfiles.last(0)}<64000"
+
+  -
+    name:       "Configured max number of processes is too low on {HOST.NAME}"
+    warn_level: "Info"
+    expression: "{Template OS Linux:kernel.maxproc.last(0)}<1024"
+
+  -
+    name:       "Too many processes on {HOST.NAME}"
+    warn_level: "Warning"
+    expression: "{Template OS Linux:proc.num[].avg(5m)}>700"
+
+  -
+    name:       "OOM detected in kern.log on {HOST.NAME}"
+    warn_level: "Warning"
+    expression: "{Template OS Linux:log[/var/log/kern.log,oom-killer].str(oom-killer)}=1 & {Template OS Linux:log[/var/log/kern.log,oom-killer].nodata(300)}#1"
+
+  -
+    name:       "OOM detected in syslog on {HOST.NAME}"
+    warn_level: "Warning"
+    expression: "{Template OS Linux:log[/var/log/syslog,oom-killer].str(oom-killer)}=1 & {Template OS Linux:log[/var/log/syslog,oom-killer].nodata(300)}#1"
+

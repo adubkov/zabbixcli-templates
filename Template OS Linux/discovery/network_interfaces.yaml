@@ -1,0 +1,46 @@
+discovery:
+    
+  "Network interfaces":
+
+    name:         "Network interface discovery"
+    method:       "Agent"
+    key:          "net.if.discovery"
+    interval:     3600
+    keep_days:    7
+    filter:
+      macro:      "{#IFNAME}"
+      regexp:     "@Network interfaces for discovery"
+    description:  |
+                  "Discovery of network interfaces as defined in global
+                   regular expression Network interfaces for discovery."
+
+    items:
+      -
+        name:         "Incoming network traffic on $1"
+        key:          "net.if.in[{#IFNAME}]"
+        units:        "bps"
+        multiplier:   8
+        value_type:   "speed"
+      -
+        name:         "Outgoing network traffic on $1"
+        key:          "net.if.out[{#IFNAME}]"
+        units:        "bps"
+        multiplier:   8
+        value_type:   "speed"
+
+    graphs:
+      -
+        name:               "Network traffic on {#IFNAME}"
+        show_working_time:  "True"
+        show_triggers:      "True"
+        y_min_type:         "Fixed"
+        y_min:              0
+        items:
+          -
+            item:     "Incoming network traffic on $1"
+            style:    "Gradient line"
+            color:    "00AA00" 
+          -
+            item:     "Outgoing network traffic on $1"
+            style:    "Gradient line"
+            color:    "3333FF" 

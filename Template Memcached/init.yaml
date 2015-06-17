@@ -1,0 +1,81 @@
+name: "Template Memcached"
+groups:
+  - "Templates"
+
+autoreg:
+  metadata: "'0I'"
+
+applications:
+
+  "Memcached":
+
+    - name:         "Memcached service running"
+      key:          "proc.num[,,,memcached]"
+      method:       "Active"
+      description:  |
+                    Monitor if memcached service running or not.
+
+    - name:         "Memcached items count"
+      key:          "graphite[memcached.memcached_items-current.value]"
+      method:       "Trapper"
+
+    - name:         "Memcached hits"
+      key:          "graphite[memcached.memcached_ops-hits.value]"
+      method:       "Trapper"
+      return_type:  "Float"
+
+    - name:         "Memcached misses"
+      key:          "graphite[memcached.memcached_ops-misses.value]"
+      method:       "Trapper"
+      return_type:  "Float"
+
+  "Security":
+
+    - name:         "Checksum of /etc/memcached.conf"
+      key:          "md5[/etc/memcached.conf]"
+      method:       "Trapper"
+      return_type:  "Text"
+
+triggers:
+
+  -
+    name:           "Memcached service is not running on {HOST.NAME}"
+    warn_level:     "Warning"
+    expression:     "{Template Memcached:proc.num[,,,memcached].max(#3)}=0"
+
+  -
+    name:           "/etc/memcached.conf was changed on {HOST.NAME}"
+    warn_level:     "Info"
+    expression:     "{Template Memcached:md5[/etc/memcached.conf].diff()}=1"
+
+
+graphs:
+  -
+    name:               "Memcached items count"
+    show_legend:        "True"
+    show_triggers:      "True"
+    y_min_type:         "Fixed"
+    y_min:              0.0
+    y_max_type:         "Calculated"
+    items:
+      -
+        item:           "Memcached items count"
+        style:          "Filled region"
+        color:          "009900"
+
+  -
+    name:               "Memcached hit\\misses"
+    show_legend:        "True"
+    show_triggers:      "True"
+    y_min_type:         "Fixed"
+    y_min:              0.0
+    y_max_type:         "Calculated"
+    items:
+      -
+        item:           "Memcached hits"
+        style:          "Filled region"
+        color:          "009900"
+      -
+        item:           "Memcached misses"
+        style:          "line"
+        color:          "990000"

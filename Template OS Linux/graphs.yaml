@@ -1,0 +1,72 @@
+graphs:
+
+  -
+    name:               "CPU jumps"
+    show_working_time:  "True"
+    show_triggers:      "True"
+    items:
+      -
+        item:           "Context switches per second"
+        color:          "009900"
+      -
+        item:           "Interrupts per second"
+        color:          "000099"
+
+  -
+    name:               "CPU utilization"
+    type:               "Stacked"
+    show_working_time:  "True"
+    y_min_type:         "Fixed"
+    y_min:              0 
+    y_max_type:         "Fixed"
+    y_max:              100              
+    items:
+      -
+        item:           "CPU softirq time"
+        color:          "55FF55"
+      -
+        item:           "CPU interrupt time"
+        color:          "009999"
+      -
+        item:           "CPU nice time"
+        color:          "990099"
+      -
+        item:           "CPU iowait time"
+        color:          "999900"
+      -
+        item:           "CPU system time"
+        color:          "990000"
+      -
+        item:           "CPU user time"
+        color:          "000099"
+      -
+        item:           "CPU idle time"
+        color:          "009900"
+
+  -
+    name:               "Memory available"
+    show_working_time:  "True"
+    show_triggers:      "True"
+    y_min_type:         "Fixed"
+    y_min:              0 
+    y_max_type:         "Item"
+    y_max:              "Total memory"         
+    items:
+      -
+        item:           "Available memory"
+        style:          "Gradient line"
+        color:          "00C800"
+
+  -
+    name:               "Swap usage"
+    show_working_time:  "True"
+    show_triggers:      "True"
+    y_min_type:         "Fixed"
+    y_min:              0 
+    y_max_type:         "Fixed"
+    y_max:              100              
+    items:
+      -
+        item:           "Used swap in %"
+        style:          "Gradient line"
+        color:          "00C800"

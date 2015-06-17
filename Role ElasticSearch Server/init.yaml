@@ -1,0 +1,18 @@
+name: "Role ElasticSearch Server"
+
+alert:
+  group: "ElasticSearch Servers"
+  do:
+    - to_user: "DB Team"
+
+autoreg:
+  metadata: "'c'"
+  add_to_group:
+    - "ElasticSearch Servers"
+
+templates:
+  - "Template ElasticSearch Master Node"
+  - "Template ElasticSearch Data Node"
+
+groups:
+  - "Roles"

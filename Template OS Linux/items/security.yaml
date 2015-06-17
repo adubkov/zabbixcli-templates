@@ -1,0 +1,23 @@
+applications:
+
+  "Security":
+
+    - name:         "Checksum of /etc/passwd"
+      key:          "md5[/etc/passwd]"
+      method:       "Trapper"
+      return_type:  "Text"
+
+    - name:         "Checksum of /etc/shadow"
+      key:          "md5[/etc/shadow]"
+      method:       "Trapper"
+      return_type:  "Text"
+
+    - name:         "Checksum of /etc/group"
+      key:          "md5[/etc/group]"
+      method:       "Trapper"
+      return_type:  "Text"
+
+    - name:         "Checksum of /bin/bash"
+      key:          "md5[/bin/bash]"
+      method:       "Trapper"
+      return_type:  "Text"
