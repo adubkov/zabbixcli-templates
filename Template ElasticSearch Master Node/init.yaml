@@ -1,0 +1,47 @@
+name: "Template ElasticSearch Master Node"
+groups:
+  - "Templates"
+
+applications:
+
+  "ElasticSearch Master":
+
+    - name:         "ElasticSearch Master service running"
+      key:          "proc.num[,,,elasticsearch-master]"
+      method:       "Active"
+      description:  |
+                    Monitor if elasticsearch-master service running or not.
+
+    - name:         "ElasticSearch Master JVM Heap Used"
+      key:          "graphite[elasticsearch-Elastica_Logs_master.gauge-jvm_mem_heap-used-percent.value]"
+      method:       "Trapper"
+      return_type:  "Float"
+
+graphs:
+  -
+    name:           "ES: Master JVM Heap Usage"
+    show_triggers:  "True"
+    y_min_type:     "Fixed"
+    y_min:          0
+    y_max_type:     "Fixed"
+    y_max:          100
+    items:
+      -
+        item:     "ElasticSearch Master JVM Heap Used"
+        style:    "Gradient line"
+        color:    "00C800"
+
+triggers:
+
+  -
+    name:           "ElasticSearch Master service is not running on {HOST.NAME}"
+    warn_level:     "High"
+    expression:     "{Template ElasticSearch Master Node:proc.num[,,,elasticsearch-master].last(0)}=0"
+  -
+    name:           "ElasticSearch Master JVM Heap Usage NODATA on {HOST.NAME}"
+    warn_level:     "High"
+    expression:     "{Template ElasticSearch Master Node:graphite[elasticsearch-Elastica_Logs_master.gauge-jvm_mem_heap-used-percent.value].nodata(600)}=1"
+  -
+    name:           "ElasticSearch Master JVM Heap Usage > 85% on {HOST.NAME}"
+    warn_level:     "High"
+    expression:     "{Template ElasticSearch Master Node:graphite[elasticsearch-Elastica_Logs_master.gauge-jvm_mem_heap-used-percent.value].min(6m)}>85"

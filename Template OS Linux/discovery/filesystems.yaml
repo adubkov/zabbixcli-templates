@@ -1,0 +1,62 @@
+discovery:
+
+  "Filesystem":
+
+    name:         "Mounted filesystem discovery"
+    method:       "Agent"
+    key:          "vfs.fs.discovery"
+    interval:     3600
+    keep_days:    7
+    filter:
+      macro:      "{#FSTYPE}"
+      regexp:     "@File systems for discovery"
+    description:  |
+                  Discovery of file systems of different types as defined
+                   in global regular expression "File systems for discovery".
+
+    items:
+      -
+        name:         "Used inodes in % on $1"
+        key:          "vfs.fs.inode[{#FSNAME},pused]"
+        return_type:  "Float"
+        units:        "%"
+      -
+        name:         "Used disk space in % on $1"
+        key:          "vfs.fs.size[{#FSNAME},pused]"
+        return_type:  "Float"
+        units:        "%"
+      -
+        name:         "Free disk space in B on $1"
+        key:          "vfs.fs.size[{#FSNAME},free]"
+
+    triggers:
+      -
+        name:         "Disk space usage >95% on volume {#FSNAME} on {HOST.NAME}"
+        warn_level:   "High"
+        expression:   "{Template OS Linux:vfs.fs.size[{#FSNAME},pused].avg(30m)}>95&{Template OS Linux:vfs.fs.size[{#FSNAME},free].last(0)}<3G" # >95% and <3Gb
+      -
+        name:         "Disk space usage >70% and <=95% on volume {#FSNAME} on {HOST.NAME}"
+        warn_level:   "Warning"
+        expression:   "{Template OS Linux:vfs.fs.size[{#FSNAME},pused].avg(30m)}>70&({Template OS Linux:vfs.fs.size[{#FSNAME},pused].avg(30m)}<95|{Template OS Linux:vfs.fs.size[{#FSNAME},pused].avg(30m)}=95)&{Template OS Linux:vfs.fs.size[{#FSNAME},free].last(0)}<3G" # >70% and <=95% and <3Gb
+      -
+        name:         "Disk inodes usage 95% on volume {#FSNAME} on {HOST.NAME}"
+        warn_level:   "High"
+        expression:   "{Template OS Linux:vfs.fs.inode[{#FSNAME},pused].avg(30m)}>95"
+
+    graphs:
+      -
+        name:           "Disk space usage {#FSNAME}"
+        show_triggers:  "True"
+        y_min_type:     "Fixed"
+        y_min:          0
+        y_max_type:     "Fixed"
+        y_max:          100
+        items:
+          -
+            item:     "Used disk space in % on $1"
+            style:    "Gradient line"
+            color:    "00C800"
+          -
+            item:     "Used inodes in % on $1"
+            style:    "Gradient line"
+            color:    "C80000"

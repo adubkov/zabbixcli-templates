@@ -1,0 +1,16 @@
+name: "Role Memcached Server"
+groups:
+  - "Roles"
+
+alert:
+  group: "Memcached Servers"
+  do:
+    - to_user: "DevOps Team"
+
+autoreg:
+  metadata: "'k'"
+  add_to_group:
+    - "Memcached Servers"
+
+templates:
+  - "Template Memcached"

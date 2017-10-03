@@ -1,0 +1,21 @@
+triggers:
+
+  -
+    name:       "/etc/passwd was changed on {HOST.NAME}"
+    warn_level: "Info"
+    expression: "{Template OS Linux:md5[/etc/passwd].diff()}=1"
+
+  -
+    name:       "/etc/shadow was changed on {HOST.NAME}"
+    warn_level: "Info"
+    expression: "{Template OS Linux:md5[/etc/shadow].diff()}=1"
+
+  -
+    name:       "/etc/group was changed on {HOST.NAME}"
+    warn_level: "Info"
+    expression: "{Template OS Linux:md5[/etc/group].diff()}=1"
+
+  -
+    name:       "/bin/bash was changed on {HOST.NAME}"
+    warn_level: "Info"
+    expression: "{Template OS Linux:md5[/bin/bash].diff()}=1"

@@ -1,0 +1,35 @@
+name: "Template ElasticSearch Client"
+groups:
+  - "Templates"
+
+autoreg:
+  metadata: "'0A'"
+
+applications:
+
+  "ElasticSearch Client":
+
+    - name:         "ElasticSearch Client service running"
+      key:          "proc.num[,,,elasticsearch]"
+      method:       "Active"
+      description:  |
+                    Monitor if elasticsearch client service running or not.
+
+  "Security":
+
+    - name:         "Checksum of /home/madmin/milkyway/utilities/ESScripts/elasticsearch.yml"
+      key:          "md5[/home/madmin/milkyway/utilities/ESScripts/elasticsearch.yml]"
+      method:       "Trapper"
+      return_type:  "Text"
+
+triggers:
+
+  -
+    name:           "ElasticSearch Client service is not running on {HOST.NAME}"
+    warn_level:     "High"
+    expression:     "{Template ElasticSearch Client:proc.num[,,,elasticsearch].max(#3)}=0"
+
+  -
+    name:           "/home/madmin/milkyway/utilities/ESScripts/elasticsearch.yml was changed on {HOST.NAME}"
+    warn_level:     "Info"
+    expression:     "{Template ElasticSearch Client:md5[/home/madmin/milkyway/utilities/ESScripts/elasticsearch.yml].diff()}=1"

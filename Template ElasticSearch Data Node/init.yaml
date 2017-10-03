@@ -1,0 +1,47 @@
+name: "Template ElasticSearch Data Node"
+groups:
+  - "Templates"
+
+applications:
+
+  "ElasticSearch Data Node":
+
+    - name:         "ElasticSearch Data service running"
+      key:          "proc.num[,,,elasticsearch-data]"
+      method:       "Active"
+      description:  |
+                    Monitor if elasticsearch-data service running or not.
+
+    - name:         "ElasticSearch Data JVM Heap Used"
+      key:          "graphite[elasticsearch-Elastica_Logs_data.gauge-jvm_mem_heap-used-percent.value]"
+      method:       "Trapper"
+      return_type:  "Float"
+
+graphs:
+  -
+    name:           "ES: Data JVM Heap Usage"
+    show_triggers:  "True"
+    y_min_type:     "Fixed"
+    y_min:          0
+    y_max_type:     "Fixed"
+    y_max:          100
+    items:
+      -
+        item:     "ElasticSearch Data JVM Heap Used"
+        style:    "Gradient line"
+        color:    "00C800"
+
+triggers:
+
+  -
+    name:           "ElasticSearch Data service is not running on {HOST.NAME}"
+    warn_level:     "High"
+    expression:     "{Template ElasticSearch Data Node:proc.num[,,,elasticsearch-data].last(0)}=0"
+  -
+    name:           "ElasticSearch Data JVM Heap Usage NODATA on {HOST.NAME}"
+    warn_level:     "High"
+    expression:     "{Template ElasticSearch Data Node:graphite[elasticsearch-Elastica_Logs_data.gauge-jvm_mem_heap-used-percent.value].nodata(600)}=1"
+  -
+    name:           "ElasticSearch Data JVM Heap Usage > 85% on {HOST.NAME}"
+    warn_level:     "High"
+    expression:     "{Template ElasticSearch Data Node:graphite[elasticsearch-Elastica_Logs_data.gauge-jvm_mem_heap-used-percent.value].min(6m)}>85"

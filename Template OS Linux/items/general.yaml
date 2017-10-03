@@ -1,0 +1,25 @@
+applications:
+
+  "General":
+    
+    - name:         "System uptime"
+      key:          "system.uptime"
+      method:       "Active"
+      units:        "uptime"
+      interval:     600
+
+    - name:         "Maximum number of opened files"
+      key:          "kernel.maxfiles"
+      method:       "Active"
+      interval:     3600
+      description:  |
+                    It could be increased by using sysctrl utility or
+                    modifying file /etc/sysctl.conf.
+
+    - name:         "Maximum number of processes"
+      key:          "kernel.maxproc"
+      method:       "Active"
+      interval:     3600
+      description:  |
+                    It could be increased by using sysctrl utility or
+                    modifying file /etc/sysctl.conf.

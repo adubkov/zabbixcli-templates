@@ -1,0 +1,10 @@
+applications:
+
+  "Processes":
+
+    - name:         "Number of processes"
+      key:          "proc.num[]"
+      method:       "Active"
+      description:  |
+                    Total number of processes in any state.
+    

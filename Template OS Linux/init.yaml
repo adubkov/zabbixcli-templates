@@ -1,0 +1,13 @@
+name: "Template OS Linux"
+
+autoreg:
+  metadata: "'1'"
+
+templates:
+  - "Template Collectd"
+  - "Template Salt-Minion"
+  - "Template Splunk"
+  - "Template Zabbix Agent"
+
+groups:
+  - "Templates"

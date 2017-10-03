@@ -1,0 +1,37 @@
+applications:
+
+  "Memory":
+
+    - name:         "Total memory"
+      key:          "vm.memory.size[total]"
+      method:       "Active"
+      units:        "B"
+      interval:     3600
+
+    - name:         "Available memory"
+      key:          "vm.memory.size[available]"
+      method:       "Active"
+      units:        "B"
+
+    - name:         "Used swap in %"
+      key:          "system.swap.size[,pused]"
+      method:       "Active"
+      return_type:  "Float"
+      units:        "%"
+    
+    - name:         "OOM killer messages in kern.log"
+      key:          "log[/var/log/kern.log,oom-killer]"
+      method:       "Active"
+      return_type:  "Log"
+      history:      "7"
+      description:  |
+                    Check for oom-killer messages in kern.log
+
+    - name:         "OOM killer messages in syslog"
+      key:          "log[/var/log/syslog,oom-killer]"
+      method:       "Active"
+      return_type:  "Log"
+      history:      "7"
+      description:  |
+                    Check for oom-killer messages in syslog
+
